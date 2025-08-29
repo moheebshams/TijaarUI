@@ -13,40 +13,55 @@
       </a>
     </div>
 
-    <!-- Home Decor -->
+    <!-- Home Decor Products -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      {% for i in '11' %}
+      {% for product in '11' %}
       <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group">
         <div class="flex flex-col md:flex-row">
+          <!-- Product Image -->
           <div class="md:w-2/5 relative">
-            <div class="h-64 md:h-full bg-gradient-to-tr from-background to-background-200 flex items-center justify-center p-6">
-              <img src="{% static product.image %}" alt="{{ product.name }}" class="max-h-44 group-hover:scale-110 transition-transform duration-500" />
-              {% if product.badge %}
-              <div class="absolute top-4 left-4 bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1.5 rounded-full">
-                {{ product.badge }}
+            <a href="{% url 'productDetail' %}">
+              <div class="h-64 md:h-full bg-gradient-to-tr from-background to-background-200 flex items-center justify-center p-6">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="max-h-44 group-hover:scale-110 transition-transform duration-500" />
+                {% if product.badge %}
+                <div class="absolute top-4 left-4 bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1.5 rounded-full">
+                  {{ product.badge }}
+                </div>
+                {% endif %}
               </div>
-              {% endif %}
-            </div>
+            </a>
           </div>
+
+          <!-- Product Details -->
           <div class="md:w-3/5 p-6 flex flex-col justify-between">
             <div>
               <h3 class="font-semibold text-headings text-2xl mb-3">{{ product.name }}</h3>
-              <p class="text-gray-600 mb-4">Elevate your home with this beautiful piece that combines style and functionality.</p>
+              <p class="text-gray-600 mb-4">
+                {{ product.description|default:"Elevate your home with this beautiful piece."|truncatechars:100 }}
+              </p>
+              
+              <!-- Ratings -->
               <div class="flex items-center mb-4">
                 <div class="flex text-yellow-400">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star-half-alt"></i>
+                  {% for i in "12345" %}
+                    {% if forloop.counter <= product.rating %}
+                      <i class="fas fa-star"></i>
+                    {% else %}
+                      <i class="far fa-star"></i>
+                    {% endif %}
+                  {% endfor %}
                 </div>
-                <span class="text-xs text-gray-500 ml-2">({{ product.reviews }})</span>
+                <span class="text-xs text-gray-500 ml-2">({{ product.reviews_count|default:"0" }})</span>
               </div>
             </div>
+
+            <!-- Price & Actions -->
             <div class="flex items-center justify-between mt-4">
               <div>
                 <span class="text-primary font-bold text-2xl">{{ product.price }}</span>
+                {% if product.old_price %}
                 <span class="text-gray-500 line-through ml-2">{{ product.old_price }}</span>
+                {% endif %}
               </div>
               <div class="flex space-x-3">
                 <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-primary hover:text-white transition-colors">
@@ -61,6 +76,8 @@
           </div>
         </div>
       </div>
+      {% empty %}
+      <p class="text-gray-600">No products available.</p>
       {% endfor %}
     </div>
   </div>
