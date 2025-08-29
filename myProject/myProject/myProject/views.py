@@ -17,7 +17,4 @@ def footer(request): return render(request, 'footer.html')
 def addToCart(request): return render(request, 'addToCart.html')
 def form(request): return render(request, 'form.html')
 def trackYourOrder(request): return render(request, 'trackYourOrder.html')
-def categories(request): return render(request, 'categories.html')
-def products(request): return render(request, 'products.html')
-def productDetail(request): return render(request, 'productDetail.html')
 
